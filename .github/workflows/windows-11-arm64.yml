@@ -1,0 +1,91 @@
+name: Build Windows Application
+
+on: [push, pull_request]
+
+jobs:
+  build_x64:
+    runs-on: windows-11-arm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check for PowerShell installation
+      run: |
+        if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
+          Write-Error "PowerShell (pwsh) is not installed."
+          exit 1
+        }
+
+    - name: Set up CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Create build directory
+      run: mkdir build_x64
+
+    - name: Enter build directory and configure
+      run: |
+        cd build_x64
+        cmake .. -A x64
+
+    - name: Build the project
+      run: |
+        cd build_x64
+        cmake --build .
+
+  build_arm64:
+    runs-on: windows-11-arm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check for PowerShell installation
+      run: |
+        if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
+          Write-Error "PowerShell (pwsh) is not installed."
+          exit 1
+        }
+
+    - name: Set up CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Create build directory
+      run: mkdir build_arm64
+
+    - name: Enter build directory and configure
+      run: |
+        cd build_arm64
+        cmake .. -A ARM64
+
+    - name: Build the project
+      run: |
+        cd build_arm64
+        cmake --build .
+
+  build_arm64ec:
+    runs-on: windows-11-arm
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Check for PowerShell installation
+      run: |
+        if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
+          Write-Error "PowerShell (pwsh) is not installed."
+          exit 1
+        }
+
+    - name: Set up CMake
+      uses: lukka/get-cmake@latest
+
+    - name: Create build directory
+      run: mkdir build_arm64ec
+
+    - name: Enter build directory and configure
+      run: |
+        cd build_arm64ec
+        cmake .. -A ARM64EC -DCMAKE_SYSTEM_VERSION=10
+
+    - name: Build the project
+      run: |
+        cd build_arm64ec
+        cmake --build .
